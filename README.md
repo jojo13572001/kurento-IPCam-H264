@@ -20,6 +20,8 @@ http://doc-kurento.readthedocs.io/en/stable/installation_guide.html
 3. Put the project on the same instance (AWS Instance 2)
 
 4. bash kurento.sh
+
+5. http://publicIP:8443/
 	
 # Test Video Site
 http://files.kurento.org/video/
