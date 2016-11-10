@@ -18,9 +18,7 @@ ex: turnserver -a -o -v -n -u ben:1234 -p 3478 -L 172.31.11.24 -r someRealm -X 5
 http://doc-kurento.readthedocs.io/en/stable/installation_guide.html
 
 3. Put the project on the same instance (AWS Instance 2)
-
 4. bash kurento.sh
-
 5. http://publicIP:8443/
 	
 # Test Video Site
