@@ -25,7 +25,7 @@ http://doc-kurento.readthedocs.io/en/stable/installation_guide.html
 http://files.kurento.org/video/
 
 # IPcam Access
-Install RTSP Camera Server(Android App) and turn off andio.
+Install RTSP Camera Server(Android App) and turn off audio.
 
 #Comment
 1. You can use video-audio/video-only/audio stream. Just modify the index.js
