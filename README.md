@@ -16,5 +16,5 @@ Install RTSP Camera Server(Android App) and turn off andio.
 #Comment
 1. You can use video-audio/video-only/audio stream. Just modify the index.js
 2. You can record the file as webm.
-3. Currently I use secureless connection(ws) because there is bug with secure connection.
+3. Currently I use secureless connection(ws) because there is problem with secure connection.
 	
