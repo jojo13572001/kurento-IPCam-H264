@@ -2,7 +2,7 @@
 IPCam RTSP streaming with H.264 video-only recording 
 
 # Description
-  My Server Environment is AWS and browser endpoint is under home router, I have to build up another turn server.
+  My Server Environment is AWS and browser endpoint is under home router, so I have to build up stun/turn server.
   If you don't need, please skip stun/turn part bellow.
   
 # Steps
