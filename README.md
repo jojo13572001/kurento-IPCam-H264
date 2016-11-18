@@ -20,7 +20,7 @@ IPCam RTSP streaming with H.264 video-only recording
 # Test Video Site
 http://files.kurento.org/video/
 
-# IPcam Access
+# Create IPcam
 Install RTSP Camera Server(Android App) and turn off audio.
 
 #Comment
