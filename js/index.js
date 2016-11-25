@@ -29,7 +29,8 @@ var args = getopts(location.search,
 {
   default:
   {
-    ws_uri: 'wss://' + location.hostname + ':8433/kurento',
+    //ws_uri: 'wss://' + location.hostname + ':8433/kurento',
+    ws_uri: 'ws://' + location.hostname + ':8888/kurento',
     file_uri: 'file:///tmp/recorder_demo.mp4', // file to be stored in media server
     ice_servers: undefined
   }
@@ -58,12 +59,12 @@ function setIceCandidateCallbacks(webRtcPeer, webRtcEp, onerror)
 window.addEventListener('load', function(event) {
   console = new Console()
 
-  var startRecordButton = document.getElementById('start');
-  startRecordButton.addEventListener('click', startRecording);
+  startStreaming(); 
+  //startRecordButton.addEventListener('click', startPlaying);
 
 });
-
-function startRecording() {
+  	
+function startStreaming() {
   console.log("onClick");
 
   //var videoInput = document.getElementById("videoInput");
@@ -71,6 +72,7 @@ function startRecording() {
 
   showSpinner(videoOutput);
 
+  var startRecordButton = document.getElementById('record');
   var stopRecordButton = document.getElementById("stop")
 
   var options = {
@@ -150,11 +152,12 @@ function startRecording() {
 		
               console.log("play");
 	      
-              recorder.record(function(error) {
-              	if (error) {
-              		console.log("record error "+ error);
-			return onError(error);
-		}
+              startRecordButton.addEventListener("click", function(event){
+                recorder.record(function(error) {
+              		if (error) {
+              			console.log("record error "+ error);
+				return onError(error);
+			}
               	console.log("record");
                 stopRecordButton.addEventListener("click", function(event){
                 	recorder.stop();
@@ -170,7 +173,7 @@ function startRecording() {
                 	playButton.addEventListener('click', startPlaying);
                 });
 	      });
-		
+	     });	
 	     });
             });
           });
