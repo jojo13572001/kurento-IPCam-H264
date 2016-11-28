@@ -145,6 +145,29 @@ function startStreaming() {
 	    
            client.connect(player, webRtc, function(error) {
             if (error) return onError(error);
+	    //before unload page
+	    window.addEventListener('beforeunload', function(event) {
+              		alert("reload page ");
+                	recorder.stop();
+                	player.stop();
+                	pipeline.release();
+                	webRtcPeer.dispose();
+                	//videoInput.src = "";
+                	videoOutput.src = "";
+                	hideSpinner(videoOutput);
+	    });
+
+	    window.addEventListener('unload', function(event) {
+              		alert("reload page ");
+                	recorder.stop();
+                	player.stop();
+                	pipeline.release();
+                	webRtcPeer.dispose();
+                	//videoInput.src = "";
+                	videoOutput.src = "";
+                	hideSpinner(videoOutput);
+	    });
+	    
             console.log("Connected");
 
             player.play(function(error) {
