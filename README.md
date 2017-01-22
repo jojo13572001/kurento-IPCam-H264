@@ -22,6 +22,7 @@ http://files.kurento.org/video/
 
 # Create IPcam
 Install RTSP Camera Server(Android App) and turn off audio.
+https://play.google.com/store/apps/details?id=com.miv.rtspcamera&hl=zh_TW
 
 #Comment
 1. You can use video-audio/video-only/audio stream. Just modify the index.js
