@@ -3,7 +3,7 @@ IPCam RTSP streaming with H.264 video-only recording
 
 # Description
   My Server Environment is AWS and browser endpoint is under home router, so I have to build up stun/turn server.
-  If you don't need, please skip stun/turn part bellow.
+  If you don't need, please skip stun/turn part bellow, you can use stund to check your NAT type.
   
 # Steps
 1. Launch turn server (AWS instance 1)   
