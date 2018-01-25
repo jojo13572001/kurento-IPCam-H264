@@ -22,7 +22,7 @@ html {
 }
 
 body {
-	padding-top: 40px;
+	padding-top: 0px;
 	body
 }
 
@@ -49,5 +49,5 @@ video,#console {
 
 .col-md-2 {
 	width: 80px;
-	padding-top: 190px;
+	padding-top: 0px;
 }
