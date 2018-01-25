@@ -116,7 +116,8 @@ function startStreaming() {
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://54.199.182.145:8554/480i.ts"}},
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://54.199.182.145:8554/1.mpg"}},
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://211.75.8.115:554/stream1", useEncodedMedia:true, mediaPipeline:pipeline}},
-          {type: 'PlayerEndpoint', params: {uri : "rtsp://211.75.8.115:554/s1"}},
+          //{type: 'PlayerEndpoint', params: {uri : "rtsp://211.75.8.115:554/s1"}},
+          {type: 'PlayerEndpoint', params: {uri : "rtsp://172.20.3.48:5544/live0.264"}},
           //{type: 'PlayerEndpoint', params: {uri : "http://files.kurento.org/video/10sec/red.webm"}},
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://58.115.71.8:5554/camera"}},
           {type: 'RecorderEndpoint', params: {uri : args.file_uri,mediaProfile: 'MP4_VIDEO_ONLY'}}
