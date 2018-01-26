@@ -57,8 +57,8 @@ function setIceCandidateCallbacks(webRtcPeer, webRtcEp, onerror)
 
 
 window.addEventListener('load', function(event) {
-  console = new Console()
-
+  console = new Console();
+  kurentoClient.register('kurento-module-crowddetector');
   startStreaming(); 
   //startRecordButton.addEventListener('click', startPlaying);
 
@@ -66,6 +66,11 @@ window.addEventListener('load', function(event) {
   	
 function startStreaming() {
   console.log("onClick");
+
+  //kurentoClient.register('kurento-module-crowddetector')
+  const RegionOfInterest       = kurentoClient.getComplexType('crowddetector.RegionOfInterest')
+  const RegionOfInterestConfig = kurentoClient.getComplexType('crowddetector.RegionOfInterestConfig')
+  const RelativePoint          = kurentoClient.getComplexType('crowddetector.RelativePoint')
 
   //var videoInput = document.getElementById("videoInput");
   var videoOutput = document.getElementById("videoOutput");
@@ -107,9 +112,39 @@ function startStreaming() {
 
       client.create('MediaPipeline', function(error, pipeline) {
         if (error) return onError(error);
-
         console.log("Got MediaPipeline");
 
+        //Create Crowd Detector Parameters
+        var options =
+        {
+            rois:
+                [
+                    RegionOfInterest({
+                        id: 'roi1',
+                        points:
+                            [
+                                RelativePoint({x: 0,   y: 0}),
+                                RelativePoint({x: 0.5, y: 0}),
+                                RelativePoint({x: 0.5, y: 0.5}),
+                                RelativePoint({x: 0,   y: 0.5})
+                            ],
+                        regionOfInterestConfig: RegionOfInterestConfig({
+                            occupancyLevelMin: 10,
+                            occupancyLevelMed: 35,
+                            occupancyLevelMax: 65,
+                            occupancyNumFramesToEvent: 5,
+                            fluidityLevelMin: 10,
+                            fluidityLevelMed: 35,
+                            fluidityLevelMax: 65,
+                            fluidityNumFramesToEvent: 5,
+                            sendOpticalFlowEvent: false,
+                            opticalFlowNumFramesToEvent: 3,
+                            opticalFlowNumFramesToReset: 3,
+                            opticalFlowAngleOffset: 0
+                        })
+                    })
+                ]
+        }
         var elements =
         [
           {type: 'WebRtcEndpoint', params: {}},
@@ -120,89 +155,108 @@ function startStreaming() {
           {type: 'PlayerEndpoint', params: {uri : "rtsp://172.20.3.48:5544/live0.264"}},
           //{type: 'PlayerEndpoint', params: {uri : "http://files.kurento.org/video/10sec/red.webm"}},
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://58.115.71.8:5554/camera"}},
-          {type: 'RecorderEndpoint', params: {uri : args.file_uri,mediaProfile: 'MP4_VIDEO_ONLY'}}
+          {type: 'RecorderEndpoint', params: {uri : args.file_uri,mediaProfile: 'MP4_VIDEO_ONLY'}},
+          {type: 'crowddetector.CrowdDetectorFilter', params: options}
         ]
 
         pipeline.create(elements, function(error, elements){
-          if (error) return onError(error);
-
-          var webRtc   = elements[0];
-          var player   = elements[1];
-          var recorder = elements[2];
-
-          setIceCandidateCallbacks(webRtcPeer, webRtc, onError)
-
-          webRtc.processOffer(offer, function(error, answer) {
             if (error) return onError(error);
+            console.log("Connecting...");
 
-            console.log("offer");
+            var webRtc   = elements[0];
+            var player   = elements[1];
+            var recorder = elements[2];
+            var crowddetector = elements[3];
 
-            webRtc.gatherCandidates(onError);
-            webRtcPeer.processAnswer(answer);
-          });
+            setIceCandidateCallbacks(webRtcPeer, webRtc, onError);
 
-          client.connect(player,  recorder, function(error) {
-           if (error) return onError(error);
-	    
-           client.connect(player, webRtc, function(error) {
-            if (error) return onError(error);
-	    //before unload page
-	    window.addEventListener('beforeunload', function(event) {
-              		alert("reload page ");
-                	recorder.stop();
-                	player.stop();
-                	pipeline.release();
-                	webRtcPeer.dispose();
-                	//videoInput.src = "";
-                	videoOutput.src = "";
-                	hideSpinner(videoOutput);
-	    });
-
-	    window.addEventListener('unload', function(event) {
-              		alert("reload page ");
-                	recorder.stop();
-                	player.stop();
-                	pipeline.release();
-                	webRtcPeer.dispose();
-                	//videoInput.src = "";
-                	videoOutput.src = "";
-                	hideSpinner(videoOutput);
-	    });
-	    
-            console.log("Connected");
-
-            player.play(function(error) {
+            webRtc.processOffer(offer, function(error, answer) {
               if (error) return onError(error);
-		
-              console.log("play");
-	      
-              startRecordButton.addEventListener("click", function(event){
-                recorder.record(function(error) {
-              		if (error) {
-              			console.log("record error "+ error);
-				return onError(error);
-			}
-              	console.log("record");
-                stopRecordButton.addEventListener("click", function(event){
-                	recorder.stop();
-                	player.stop();
-                	pipeline.release();
-                	webRtcPeer.dispose();
-                	//videoInput.src = "";
-                	videoOutput.src = "";
 
-                	hideSpinner(videoOutput);
+              console.log("offer");
 
-                	var playButton = document.getElementById('play');
-                	playButton.addEventListener('click', startPlaying);
-                });
-	      });
-	     });	
-	     });
+              webRtc.gatherCandidates(onError);
+              webRtcPeer.processAnswer(answer);
             });
-          });
-	  //-------------------------------------------
-        });
+
+            crowddetector.on('CrowdDetectorDirection', function (data){
+                console.log("Direction event received in roi " + data.roiID +
+                    " with direction " + data.directionAngle);
+            });
+
+            crowddetector.on('CrowdDetectorFluidity', function (data){
+                console.log("Fluidity event received in roi " + data.roiID +
+                    ". Fluidity level " + data.fluidityPercentage +
+                    " and fluidity percentage " + data.fluidityLevel);
+            });
+
+            crowddetector.on('CrowdDetectorOccupancy', function (data){
+                console.log("Occupancy event received in roi " + data.roiID +
+                    ". Occupancy level " + data.occupancyPercentage +
+                    " and occupancy percentage " + data.occupancyLevel);
+            });
+
+            client.connect(player,  recorder, function(error) {
+                if (error) return onError(error);
+
+                client.connect(player, crowddetector, webRtc, function(error) {
+                    if (error) return onError(error);
+                    //before unload page
+                    window.addEventListener('beforeunload', function(event) {
+                                alert("reload page ");
+                                recorder.stop();
+                                player.stop();
+                                pipeline.release();
+                                webRtcPeer.dispose();
+                                //videoInput.src = "";
+                                videoOutput.src = "";
+                                hideSpinner(videoOutput);
+                    });
+
+                    window.addEventListener('unload', function(event) {
+                                alert("reload page ");
+                                recorder.stop();
+                                player.stop();
+                                pipeline.release();
+                                webRtcPeer.dispose();
+                                //videoInput.src = "";
+                                videoOutput.src = "";
+                                hideSpinner(videoOutput);
+                    });
+
+                    console.log("Connected");
+
+                    player.play(function(error) {
+                        if (error) return onError(error);
+
+                        console.log("play");
+
+                        startRecordButton.addEventListener("click", function(event){
+                            recorder.record(function(error) {
+                                if (error) {
+                                    console.log("record error "+ error);
+                                    return onError(error);
+                                }
+                                console.log("record");
+                                stopRecordButton.addEventListener("click", function(event){
+                                    recorder.stop();
+                                    player.stop();
+                                    pipeline.release();
+                                    webRtcPeer.dispose();
+                                    //videoInput.src = "";
+                                    videoOutput.src = "";
+
+                                    hideSpinner(videoOutput);
+
+                                    var playButton = document.getElementById('play');
+                                    playButton.addEventListener('click', startPlaying);
+                                });
+                            });
+                        });
+                     });
+                });
+            });
+        });//end of pipeline create
       });
     });
   }

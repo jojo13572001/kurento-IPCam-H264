@@ -25,6 +25,8 @@
     "ekko-lightbox": "~3.3.0",
     "demo-console": "1.5.1",
     "kurento-client": "6.6.0",
+    "kurento-module-crowddetector": "6.6.0",
     "kurento-utils": "6.6.0"
+
   }
 }
