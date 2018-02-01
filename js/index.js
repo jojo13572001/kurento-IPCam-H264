@@ -15,6 +15,9 @@
 *
 */
 
+var pipeline;
+var webRtcPeer
+
 function getopts(args, opts)
 {
   var result = opts.default || {};
@@ -31,6 +34,7 @@ var args = getopts(location.search,
   {
     //ws_uri: 'wss://' + location.hostname + ':8433/kurento',
     ws_uri: 'ws://' + location.hostname + ':8888/kurento',
+    logo_uri: 'http://' + location.host + '/img/kurento-logo.png',
     file_uri: 'file:///tmp/recorder_demo.mp4', // file to be stored in media server
     ice_servers: undefined
   }
@@ -58,7 +62,8 @@ function setIceCandidateCallbacks(webRtcPeer, webRtcEp, onerror)
 
 window.addEventListener('load', function(event) {
   console = new Console();
-  kurentoClient.register('kurento-module-crowddetector');
+
+  kurentoClient.register('kurento-module-crowddetector')
   startStreaming(); 
   //startRecordButton.addEventListener('click', startPlaying);
 
@@ -124,9 +129,9 @@ function startStreaming() {
                         points:
                             [
                                 RelativePoint({x: 0,   y: 0}),
-                                RelativePoint({x: 0.5, y: 0}),
-                                RelativePoint({x: 0.5, y: 0.5}),
-                                RelativePoint({x: 0,   y: 0.5})
+                                RelativePoint({x: 1,   y: 0}),
+                                RelativePoint({x: 1,   y: 1}),
+                                RelativePoint({x: 0,   y: 1})
                             ],
                         regionOfInterestConfig: RegionOfInterestConfig({
                             occupancyLevelMin: 10,
@@ -152,7 +157,7 @@ function startStreaming() {
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://54.199.182.145:8554/1.mpg"}},
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://211.75.8.115:554/stream1", useEncodedMedia:true, mediaPipeline:pipeline}},
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://211.75.8.115:554/s1"}},
-          {type: 'PlayerEndpoint', params: {uri : "rtsp://172.20.3.48:5544/live0.264"}},
+          {type: 'PlayerEndpoint', params: {uri : "rtsp://172.20.3.64:5544/live0.264"}},
           //{type: 'PlayerEndpoint', params: {uri : "http://files.kurento.org/video/10sec/red.webm"}},
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://58.115.71.8:5554/camera"}},
           {type: 'RecorderEndpoint', params: {uri : args.file_uri,mediaProfile: 'MP4_VIDEO_ONLY'}},
