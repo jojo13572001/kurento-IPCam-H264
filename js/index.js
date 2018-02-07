@@ -128,8 +128,8 @@ function startStreaming() {
                         id: 'roi1',
                         points:
                             [
-                                RelativePoint({x: 0,   y: 0}),
-                                RelativePoint({x: 1,   y: 0}),
+                                RelativePoint({x: 0,   y: 0.3}),
+                                RelativePoint({x: 1,   y: 0.3}),
                                 RelativePoint({x: 1,   y: 1}),
                                 RelativePoint({x: 0,   y: 1})
                             ],
@@ -156,8 +156,8 @@ function startStreaming() {
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://54.199.182.145:8554/480i.ts"}},
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://54.199.182.145:8554/1.mpg"}},
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://211.75.8.115:554/stream1", useEncodedMedia:true, mediaPipeline:pipeline}},
-          //{type: 'PlayerEndpoint', params: {uri : "rtsp://211.75.8.115:554/s1"}},
-          {type: 'PlayerEndpoint', params: {uri : "rtsp://172.20.3.64:5544/live0.264"}},
+          {type: 'PlayerEndpoint', params: {uri : "rtsp://211.23.139.64:40003/CH001.sdp"}},
+          //{type: 'PlayerEndpoint', params: {uri : "rtsp://172.20.3.64:5544/live0.264"}},
           //{type: 'PlayerEndpoint', params: {uri : "http://files.kurento.org/video/10sec/red.webm"}},
           //{type: 'PlayerEndpoint', params: {uri : "rtsp://58.115.71.8:5554/camera"}},
           {type: 'RecorderEndpoint', params: {uri : args.file_uri,mediaProfile: 'MP4_VIDEO_ONLY'}},
