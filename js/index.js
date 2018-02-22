@@ -33,7 +33,7 @@ var args = getopts(location.search,
   default:
   {
     //ws_uri: 'wss://' + location.hostname + ':8433/kurento',
-    ws_uri: 'ws://' + location.hostname + ':8888/kurento',
+    ws_uri: 'ws://' + location.hostname + ':30063/kurento',
     logo_uri: 'http://' + location.host + '/img/kurento-logo.png',
     file_uri: 'file:///tmp/recorder_demo.mp4', // file to be stored in media server
     ice_servers: undefined
